@@ -12,6 +12,7 @@
     "aurelia-bootstrapper": "^2.3.3",
     "aurelia-dialog": "^2.0.0",
     "aurelia-fetch-client": "^1.8.2",
+    "aurelia-loader-webpack": "^2.2.4",
     "bootstrap": "^5.1.0",
     "font-awesome": "^4.7.0"
   },
