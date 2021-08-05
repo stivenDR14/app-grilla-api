@@ -1,0 +1,64 @@
+<template>
+  <require from="./styles.css"></require>
+  <h1 style="margin-left: 30%;"><b>Almacen de videojuegos</b> </h1>
+  <div class="container px-4 jumbotron">
+    <form >
+      <div class="row gy-5">
+        <div class="col-5 col-md-5">
+          <div class="form-group">
+            <label for="exampleInput1">Dato 1</label>
+            <input type="text" class="form-control" id="exampleInput1" placeholder="Dato 1">
+          </div>
+        </div>
+        <br>
+        <div class="col-5 col-md-5">
+          <div class="form-group">
+            <label for="exampleInput2">Dato 2</label>
+            <input type="text" class="form-control" id="exampleInput2" placeholder="Dato 2">
+          </div>
+        </div>
+        <div class="col-2 col-md-2 boton-plus">
+          <button type="submit" class="btn btn-success btn-add"><i class="fa fa-plus-circle" style="font-size: 2em; color: White;"></i></button>
+        </div>
+      </div>
+      
+    </form>
+  </div>
+
+  
+
+  <div class="container px-4 jumbotron" style="margin-top: 5%;">
+    <h1 style="margin-left: 40%;">Registros</h1>
+    <div repeat.for="item of listItems">
+
+      <div class="row gy-5">
+        <div class="col-4 col-md-5">
+          <div class="placeholder-glow">
+            <div class="${loading? 'placeholder placeholder-glow' : 'p-3 border bg-light'}" show.bind="editMode[item.id]">${item.title}</div>
+            <input type="text" class="form-control" placeholder="${item.title}" show.bind="!editMode[item.id]">
+          </div>
+        </div>
+        <div class="col-4 col-md-5">
+          <div class="placeholder-glow">
+            <div class="${loading? 'placeholder placeholder-glow' : 'p-3 border bg-light'}" show.bind="editMode[item.id]">${item.completed}</div>
+            <input type="text" class="form-control" placeholder="${item.completed}" show.bind="!editMode[item.id]">
+          </div>
+          
+        </div>
+        
+        <div class="col-2 col-md-1 btn-list">
+          <button class="${editMode[item.id]?'btn btn-info':'btn btn-success'}" click.trigger="handleModeChange(item.id)"><i class="${editMode[item.id]?'fa fa-edit':'fa fa-check-circle'}"></i></button>
+        </div>
+        <div class="col-2 col-md-1 btn-list">
+          <button class="btn btn-danger"  click.trigger = "openModal()"><i class="fa fa-trash"></i></button>
+        </div>
+        
+      </div>
+    
+      <hr><br>
+    </div>
+
+  </div>
+ 
+</div>
+</template>
