@@ -1,6 +1,6 @@
 <template>
   <require from="./styles/styles.css"></require>
-  <h1 style="margin-left: 30%;"><b>Almacen de videojuegos</b> </h1>
+  <h1 style="margin-left: 30%;"><b>THT Game</b> </h1>
   <div class="container px-4 jumbotron">
     <form submit.trigger="setNewLog()">
       <div class="row gy-5">
@@ -45,7 +45,7 @@
             </select>
           </div>
         </div>
-        <div class="col-6 col-md-6">
+        <!-- <div class="col-6 col-md-6">
           <div class="form-group">
             <label for="exampleInput7">Category</label>
             <input type="text" class="form-control" id="exampleInput7" value.bind = "log.category" >
@@ -55,7 +55,7 @@
           <div class="form-group">
             <label for="exampleInput8">Platform</label>
             <input type="text" class="form-control" id="exampleInput8" value.bind = "log.platform" >
-          </div>
+          </div> -->
         </div>
         <div class="col-6 col-md-6 offset-5 boton-plus">
           <button type="submit" class="btn btn-success btn-add"><i class="fa fa-plus-circle" style="font-size: 2em; color: White;"></i></button>
@@ -69,40 +69,75 @@
 
   <div class="container px-4 jumbotron" style="margin-top: 5%;">
     <h1 style="margin-left: 40%;">Registros</h1>
-    <div repeat.for="item of listItems">
+    
+    <div show.bind="error" style="color: red;">
+      Error al ejecutar petición
+    </div>
+    <div>
+      <div repeat.for="item of listItems">
 
-      <div class="row gy-5">
-        <div class="col-4 col-md-5">
-          <div class="placeholder-glow">
-            <div class='p-3 border bg-light' show.bind="editMode[item.id]  && !loading">${item.title}</div>
-            <div class='placeholder placeholder-glow' show.bind="loading">${item.title}</div>
-            <input type="text" class="form-control"  show.bind="!editMode[item.id] && !loading" value.bind="item.title">
+        <div class="row gy-5">
+          <div class="col-4 col-md-5">
+            <div class="placeholder-glow">
+              <label for="show1">Name</label>
+              <div class='p-3 border bg-light' id="show1" show.bind="editMode[item.videoGameId]  && !loading">${item.name}</div>
+              <div class='placeholder placeholder-glow' show.bind="loading">${item.name}</div>
+              <input type="text" class="form-control" id="show1" show.bind="!editMode[item.videoGameId] && !loading" value.bind="item.name">
+            </div>
           </div>
-        </div>
-        <div class="col-4 col-md-5">
-          <div class="placeholder-glow">
-            <div class='p-3 border bg-light' show.bind="editMode[item.id] && !loading">${item.completed}</div>
-            <div class='placeholder placeholder-glow' show.bind="loading">${item.completed}</div>
-            <select class="form-control" show.bind="!editMode[item.id] && !loading" value.bind = "item.completed">
-              <option selected disabled>Seleccionar....</option>
-              <option>true</option>
-              <option>false</option>
-            </select>
+          <div class="col-4 col-md-5">
+            <div class="placeholder-glow">
+              <label for="show2">Active</label>
+              <div class='p-3 border bg-light' id="show2" show.bind="editMode[item.videoGameId] && !loading">${item.active}</div>
+              <div class='placeholder placeholder-glow' show.bind="loading">${item.active}</div>
+              <select class="form-control" id="show2" show.bind="!editMode[item.videoGameId] && !loading" value.bind = "item.active">
+                <option selected disabled>Seleccionar....</option>
+                <option>true</option>
+                <option>false</option>
+              </select>
+            </div>            
+          </div>
+
+          <div class="col-4 col-md-5">
+            <div class="placeholder-glow">
+              <label for="show3">Description</label>
+              <div class='p-3 border bg-light' id="show3" show.bind="editMode[item.videoGameId]  && !loading">${item.description}</div>
+              <div class='placeholder placeholder-glow' show.bind="loading">${item.description}</div>
+              <input type="text" class="form-control" id="show3"  show.bind="!editMode[item.videoGameId] && !loading" value.bind="item.description">
+            </div>
+          </div>
+
+          <div class="col-4 col-md-5">
+            <div class="placeholder-glow">
+              <label for="show4">Quantity Available</label>
+              <div class='p-3 border bg-light' id="show4" show.bind="editMode[item.videoGameId]  && !loading">${item.quantityAvailable}</div>
+              <div class='placeholder placeholder-glow' show.bind="loading">${item.quantityAvailable}</div>
+              <input type="text" class="form-control" id="show4" show.bind="!editMode[item.videoGameId] && !loading" value.bind="item.quantityAvailable">
+            </div>
+          </div>
+
+          <div class="col-4 col-md-5">
+            <div class="placeholder-glow">
+              <label for="show5">Unit Value</label>
+              <div class='p-3 border bg-light' id="show5" show.bind="editMode[item.videoGameId]  && !loading">${item.unitValue}</div>
+              <div class='placeholder placeholder-glow' show.bind="loading">${item.unitValue}</div>
+              <input type="text" class="form-control" id="show5"  show.bind="!editMode[item.videoGameId] && !loading" value.bind="item.unitValue">
+            </div>
+          </div>
+          
+          <div class="col-2 col-md-1 btn-list">
+            <button class="${editMode[item.videoGameId]?'btn btn-info':'btn btn-success'}" click.trigger="handleModeChange(item.videoGameId, item)" show.bind="!loading"><i class="${editMode[item.videoGameId]?'fa fa-edit':'fa fa-check-circle'}"></i></button>
+          </div>
+          <div class="col-2 col-md-1 btn-list">
+            <button class="btn btn-danger" show.bind="!loading" click.trigger="deleteLog(item.videoGameId, item)"><i class="fa fa-trash"></i></button>
           </div>
           
         </div>
-        
-        <div class="col-2 col-md-1 btn-list">
-          <button class="${editMode[item.id]?'btn btn-info':'btn btn-success'}" click.trigger="handleModeChange(item.id, item)" show.bind="!loading"><i class="${editMode[item.id]?'fa fa-edit':'fa fa-check-circle'}"></i></button>
-        </div>
-        <div class="col-2 col-md-1 btn-list">
-          <button class="btn btn-danger" show.bind="!loading" click.trigger="deleteLog(item.id, item)"><i class="fa fa-trash"></i></button>
-        </div>
-        
+      
+        <hr><br>
       </div>
-    
-      <hr><br>
     </div>
+    
 
   </div>
  

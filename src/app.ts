@@ -11,7 +11,9 @@ export class App {
   loading: boolean;
   editMode: { 1: boolean; 2: boolean; 3: boolean; };
   dialogService: DialogService;
-  log:{videoGameId: number; name:String;description:String;categoryId:number;platformId:number;quantityAvailable:number;active:boolean;category:String;platform:String;};
+  log:{videoGameId: number; name:String;description:String;categoryId:number;platformId:number;quantityAvailable:number;active:boolean;category:any;platform:any;};
+  url: string;
+  error: boolean;
   constructor(dialogService: DialogService) {
   this.listItems = [{videoGameId: "----------------------", name:"----------------------", description:"----------------------", categoryId:"----------------------", platformId:"----------------------", quantityAvailable:"----------------------", active:"----------------------", category:"----------------------", platform:"----------------------",}
 ,{videoGameId: "----------------------", name:"----------------------", description:"----------------------", categoryId:"----------------------", platformId:"----------------------", quantityAvailable:"----------------------", active:"----------------------", category:"----------------------", platform:"----------------------",},
@@ -19,6 +21,8 @@ export class App {
     this.loading=false;
     this.editMode={ 1: true, 2: true, 3: true }
     this.dialogService = dialogService;
+    this.url="http://172.23.204.144:5001/VideoGame";
+    this.error=false;
   }
 
   //primer parte del ciclo de vida
@@ -43,15 +47,18 @@ export class App {
   // api rest get
   getData(context?:any) {
     context.loading=true
-    httpClient.fetch('https://jsonplaceholder.typicode.com/todos')
+    httpClient.fetch(context.url)
     .then(response => response.json())
     .then(data => {
        console.log("get: ",data)
        context.listItems=data
-       data.map((item: { id: number; })=>context.editMode[item.id]=true);
+       data.map((item: { videoGameId: number; })=>context.editMode[item.videoGameId]=true);
+       context.error=false
+       console.log(context.editMode)
     })
     .catch(error=>
-    console.log("error en request: ",error))
+    {console.log("error en request: ",error)
+    context.error=true})
     .finally(()=>
       {
         context.loading=false
@@ -63,7 +70,7 @@ export class App {
   postData(data: any, context?:any) {
     
     context.loading=true
-    httpClient.fetch('http://jsonplaceholder.typicode.com/todos', {
+    httpClient.fetch(context.url, {
        method: "POST",
        body: JSON.stringify(data)
     })
@@ -73,7 +80,8 @@ export class App {
       context.getData(context)
     })
     .catch(error=>
-      console.log("error en request: ",error))
+      {console.log("error en request: ",error)
+      context.error=true})
     .finally(()=>
       {
         context.loading=false
@@ -84,7 +92,7 @@ export class App {
   putData(data: any, context?:any) {
     
     context.loading=true
-    httpClient.fetch('http://jsonplaceholder.typicode.com/todos', {
+    httpClient.fetch(context.url, {
        method: "PUT",
        body: JSON.stringify(data)
     })
@@ -94,7 +102,8 @@ export class App {
       context.getData(context)
     })
     .catch(error=>
-      console.log("error en request: ",error))
+      {console.log("error en request: ",error)
+      context.error=true})
     .finally(()=>
       {
         context.loading=false
@@ -103,11 +112,12 @@ export class App {
   }
 
   // api rest delete
-  deleteData(context?:any) {
+  deleteData(data: any, context?:any) {
     
     context.loading=true
-    httpClient.fetch('http://jsonplaceholder.typicode.com/todos', {
+    httpClient.fetch(context.url, {
        method: "DELETE",
+       body: JSON.stringify(data)
     })
     .then(response => response.json())
     .then(data=>{
@@ -115,7 +125,8 @@ export class App {
       context.getData(context)
     })
     .catch(error=>
-      console.log("error en request: ",error))
+      {console.log("error en request: ",error)
+      context.error=true})
     .finally(()=>
       {
         context.loading=false
@@ -142,7 +153,7 @@ export class App {
    
    _context.editMode[_id]=true
    //put
-   _item.completed=JSON.parse(_item.completed.toString())
+   _item.active=JSON.parse(_item.active.toString())
    console.log("corriendo", _id, _item)
    _context.putData(_item, _context)
  }
@@ -151,11 +162,22 @@ export class App {
 
    console.log("nuevo",this.log)
    if(this.log){
-    if(this.log.name && this.log.description && this.log.categoryId && this.log.platformId && this.log.quantityAvailable && this.log.active.toString()!=="Seleccionar..." && this.log.category && this.log.platform){
+    if(this.log.name && this.log.description && this.log.categoryId && this.log.platformId && this.log.quantityAvailable && this.log.active.toString()!=="Seleccionar..."){
       this.log.videoGameId=this.listItems.length+1
       console.log("nuevo",this.log)
       //post
       this.log.active=JSON.parse(this.log.active.toString())
+      this.log={...this.log, "category": {
+        "categoryId": 0,
+        "name": "string",
+        "description": "string"
+      },
+      "platform": {
+        "platformId": 0,
+        "name": "string",
+        "version": "string"
+      }}
+      delete this.log.videoGameId
       this.postData(this.log, this)
     }else{
       this.openModal('Debes colocar datos para continuar',0, )
@@ -174,7 +196,17 @@ export class App {
 public setDeleteLog(_id:number, _context:any, _item:any){
   console.log("remover",_id,_item)
   //delete
-  _context.deleteData(_context)
+  _item={..._item, "category": {
+    "categoryId": 0,
+    "name": "string",
+    "description": "string"
+  },
+  "platform": {
+    "platformId": 0,
+    "name": "string",
+    "version": "string"
+  }}
+  _context.deleteData(_item,_context)
  }
 
  
