@@ -17,12 +17,12 @@
     "options": {
       "server": "dev",
       "extractCss": "prod",
-      "coverage": false
+      "coverage": true
     }
   },
   "platform": {
     "hmr": false,
-    "open": false,
+    "open": true,
     "port": 8080,
     "host": "localhost",
     "output": "dist"

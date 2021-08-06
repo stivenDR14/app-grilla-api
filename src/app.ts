@@ -23,7 +23,7 @@ export class App {
 
   //primer parte del ciclo de vida
   created() {
-    this.getData()
+    this.getData(this)
   }
 
   //editar o aplicar cambios 
@@ -42,20 +42,86 @@ export class App {
 
   // api rest get
   getData(context?:any) {
-    if(!context){
-      context=this
-    }
     context.loading=true
     httpClient.fetch('https://jsonplaceholder.typicode.com/todos')
     .then(response => response.json())
     .then(data => {
-       console.log(data)
+       console.log("get: ",data)
        context.listItems=data
-       context.loading=false
        data.map((item: { id: number; })=>context.editMode[item.id]=true);
-    });
+    })
+    .catch(error=>
+    console.log("error en request: ",error))
+    .finally(()=>
+      {
+        context.loading=false
+      }
+    )
   }
 
+  // api rest post
+  postData(data: any, context?:any) {
+    
+    context.loading=true
+    httpClient.fetch('http://jsonplaceholder.typicode.com/todos', {
+       method: "POST",
+       body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data=>{
+      console.log("post: ",data)
+      context.getData(context)
+    })
+    .catch(error=>
+      console.log("error en request: ",error))
+    .finally(()=>
+      {
+        context.loading=false
+      }
+    )
+  }
+  // api rest put
+  putData(data: any, context?:any) {
+    
+    context.loading=true
+    httpClient.fetch('http://jsonplaceholder.typicode.com/todos', {
+       method: "PUT",
+       body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data=>{
+      console.log("post: ",data)
+      context.getData(context)
+    })
+    .catch(error=>
+      console.log("error en request: ",error))
+    .finally(()=>
+      {
+        context.loading=false
+      }
+    )
+  }
+
+  // api rest delete
+  deleteData(context?:any) {
+    
+    context.loading=true
+    httpClient.fetch('http://jsonplaceholder.typicode.com/todos', {
+       method: "DELETE",
+    })
+    .then(response => response.json())
+    .then(data=>{
+      console.log("post: ",data)
+      context.getData(context)
+    })
+    .catch(error=>
+      console.log("error en request: ",error))
+    .finally(()=>
+      {
+        context.loading=false
+      }
+    )
+  }
   // abrir dialogo
   openModal(_mensaje:String, _type:number,_item?:any,_id?:number) {
     console.log("abriendo modal")
@@ -73,17 +139,24 @@ export class App {
 
  //ejecutar seteo de estado boton aditar/cambiar
  public setEditMode(_id:number, _context:any, _item:any){
-   console.log("corriendo", _id, _item)
+   
    _context.editMode[_id]=true
    //put
+   _item.completed=JSON.parse(_item.completed.toString())
+   console.log("corriendo", _id, _item)
+   _context.putData(_item, _context)
  }
 
  setNewLog(){
 
    console.log("nuevo",this.log)
    if(this.log){
-    if(this.log.videoGameId && this.log.name && this.log.description && this.log.categoryId && this.log.platformId && this.log.quantityAvailable && this.log.active && this.log.category && this.log.platform){
+    if(this.log.name && this.log.description && this.log.categoryId && this.log.platformId && this.log.quantityAvailable && this.log.active.toString()!=="Seleccionar..." && this.log.category && this.log.platform){
+      this.log.videoGameId=this.listItems.length+1
+      console.log("nuevo",this.log)
       //post
+      this.log.active=JSON.parse(this.log.active.toString())
+      this.postData(this.log, this)
     }else{
       this.openModal('Debes colocar datos para continuar',0, )
     }
@@ -101,7 +174,7 @@ export class App {
 public setDeleteLog(_id:number, _context:any, _item:any){
   console.log("remover",_id,_item)
   //delete
-  _context.getData()
+  _context.deleteData(_context)
  }
 
  

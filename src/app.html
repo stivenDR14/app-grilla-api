@@ -4,56 +4,60 @@
   <div class="container px-4 jumbotron">
     <form submit.trigger="setNewLog()">
       <div class="row gy-5">
-        <div class="col-5 col-md-5">
+        <div class="col-6 col-md-6">
           <div class="form-group">
             <label for="exampleInput1">Name</label>
-            <input type="text" class="form-control" id="exampleInput1" value.bind = "log.title" placeholder="Dato 1">
+            <input type="text" class="form-control" id="exampleInput1" value.bind = "log.name" >
           </div>
         </div>
         <br>
-        <div class="col-5 col-md-5">
+        <div class="col-6 col-md-6">
           <div class="form-group">
             <label for="exampleInput2">Description</label>
-            <input type="text" class="form-control" id="exampleInput2" value.bind = "log.completed" placeholder="Dato 2">
+            <input type="text" class="form-control" id="exampleInput2" value.bind = "log.description" >
           </div>
         </div>
-        <div class="col-5 col-md-5">
+        <div class="col-6 col-md-6">
           <div class="form-group">
-            <label for="exampleInput2">Category ID</label>
-            <input type="text" class="form-control" id="exampleInput2" value.bind = "log.completed" placeholder="Dato 2">
+            <label for="exampleInput3">Category ID</label>
+            <input type="number" class="form-control" id="exampleInput3" value.bind = "log.categoryId" >
           </div>
         </div>
-        <div class="col-5 col-md-5">
+        <div class="col-6 col-md-6">
           <div class="form-group">
-            <label for="exampleInput2">Platform ID</label>
-            <input type="text" class="form-control" id="exampleInput2" value.bind = "log.completed" placeholder="Dato 2">
+            <label for="exampleInput4">Platform ID</label>
+            <input type="number" class="form-control" id="exampleInput4" value.bind = "log.platformId" >
           </div>
         </div>
-        <div class="col-5 col-md-5">
+        <div class="col-6 col-md-6">
           <div class="form-group">
-            <label for="exampleInput2">Quantity Available</label>
-            <input type="text" class="form-control" id="exampleInput2" value.bind = "log.completed" placeholder="Dato 2">
+            <label for="exampleInput5">Quantity Available</label>
+            <input type="number" class="form-control" id="exampleInput5" value.bind = "log.quantityAvailable" >
           </div>
         </div>
-        <div class="col-5 col-md-5">
+        <div class="col-6 col-md-6">
           <div class="form-group">
-            <label for="exampleInput2">Active</label>
-            <input type="text" class="form-control" id="exampleInput2" value.bind = "log.completed" placeholder="Dato 2">
+            <label for="exampleInput6">Active</label>
+            <select id="exampleInput6" class="form-control" value.bind = "log.active">
+              <option selected disabled>Seleccionar....</option>
+              <option>true</option>
+              <option>false</option>
+            </select>
           </div>
         </div>
-        <div class="col-5 col-md-5">
+        <div class="col-6 col-md-6">
           <div class="form-group">
-            <label for="exampleInput2">Category</label>
-            <input type="text" class="form-control" id="exampleInput2" value.bind = "log.completed" placeholder="Dato 2">
+            <label for="exampleInput7">Category</label>
+            <input type="text" class="form-control" id="exampleInput7" value.bind = "log.category" >
           </div>
         </div>
-        <div class="col-5 col-md-5">
+        <div class="col-6 col-md-6">
           <div class="form-group">
-            <label for="exampleInput2">Platform</label>
-            <input type="text" class="form-control" id="exampleInput2" value.bind = "log.completed" placeholder="Dato 2">
+            <label for="exampleInput8">Platform</label>
+            <input type="text" class="form-control" id="exampleInput8" value.bind = "log.platform" >
           </div>
         </div>
-        <div class="col-2 col-md-2 boton-plus">
+        <div class="col-6 col-md-6 offset-5 boton-plus">
           <button type="submit" class="btn btn-success btn-add"><i class="fa fa-plus-circle" style="font-size: 2em; color: White;"></i></button>
         </div>
       </div>
@@ -72,14 +76,18 @@
           <div class="placeholder-glow">
             <div class='p-3 border bg-light' show.bind="editMode[item.id]  && !loading">${item.title}</div>
             <div class='placeholder placeholder-glow' show.bind="loading">${item.title}</div>
-            <input type="text" class="form-control" placeholder="${item.completed}" show.bind="!editMode[item.id] && !loading" value.bind="item.title">
+            <input type="text" class="form-control"  show.bind="!editMode[item.id] && !loading" value.bind="item.title">
           </div>
         </div>
         <div class="col-4 col-md-5">
           <div class="placeholder-glow">
             <div class='p-3 border bg-light' show.bind="editMode[item.id] && !loading">${item.completed}</div>
             <div class='placeholder placeholder-glow' show.bind="loading">${item.completed}</div>
-            <input type="text" class="form-control" placeholder="${item.completed}" show.bind="!editMode[item.id] && !loading">
+            <select class="form-control" show.bind="!editMode[item.id] && !loading" value.bind = "item.completed">
+              <option selected disabled>Seleccionar....</option>
+              <option>true</option>
+              <option>false</option>
+            </select>
           </div>
           
         </div>
